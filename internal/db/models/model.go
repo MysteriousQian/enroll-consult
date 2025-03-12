@@ -12,5 +12,7 @@ func AutoMigrateAllModels() error {
 	return gorm.MasterDb.AutoMigrate(
 		// &User{},
 		&AcceptDetail{},
+		&Province{},
+		&Year{},
 	) // 自动迁移数据库
 }
