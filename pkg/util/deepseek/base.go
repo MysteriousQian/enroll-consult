@@ -46,8 +46,8 @@ func SendRequest(question string) (string, error) {
 			},
 		},
 	}
-	ctx := context.Background()
-	resp, err := DeepseekClient.CreateChatCompletion(ctx, &request)
+	// ctx := context.Background()
+	resp, err := DeepseekClient.CreateChatCompletion(context.TODO(), &request)
 	if err != nil {
 		log.Error("ChatCompletion failed: %v", err)
 		return "", err

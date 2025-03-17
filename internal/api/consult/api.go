@@ -6,6 +6,26 @@ import (
 	"go_server/internal/services"
 )
 
+func GetAcceptDetail(resp server.Response) {
+	param := struct {
+		Major    string `json:"major"`
+		Province string `json:"province"`
+		Year     int    `json:"year"`
+	}{}
+	err := resp.Json(&param)
+	if err != nil {
+		resp.Failed("param error")
+		return
+	}
+	details, err := services.GetAcceptDetailsList(param.Major, param.Province, param.Year)
+	if err != nil {
+		resp.Failed(fmt.Sprintf("%v", err))
+		return
+	}
+	resp.Res["list"] = details
+	resp.Success("operate success")
+}
+
 func AskQuestion(resp server.Response) {
 	param := struct {
 		Question string `json:"question"`
@@ -27,15 +47,16 @@ func PredictEnroll(resp server.Response) {
 	param := struct {
 		Major    string  `json:"major"`
 		Province string  `json:"province"`
+		Subject  string  `json:"subject"`
 		Grade    float64 `json:"grade"`
 		Rank     int     `json:"rank"`
 	}{}
 	err := resp.Json(&param)
-	if err != nil || param.Major == "" || param.Province == "" || param.Grade <= 0 || param.Rank <= 0 {
+	if err != nil || param.Major == "" || param.Province == "" || param.Subject == "" || param.Grade <= 0 || param.Rank <= 0 {
 		resp.Failed("param error")
 		return
 	}
-	reply, err := services.PredictEnroll(param.Major, param.Province, param.Grade, param.Rank)
+	reply, err := services.PredictEnroll(param.Major, param.Province, param.Subject, param.Grade, param.Rank)
 	if err != nil {
 		resp.Failed(fmt.Sprintf("%v", err))
 		return

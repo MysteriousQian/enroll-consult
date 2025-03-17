@@ -2,6 +2,8 @@ package api
 
 import (
 	"go_server/internal/api/consult"
+	"go_server/internal/api/major"
+	"go_server/internal/api/teacher"
 	"go_server/internal/api/user"
 	"go_server/internal/handler/network/server"
 	"go_server/pkg/util/log"
@@ -12,6 +14,8 @@ import (
 const (
 	userPath    = "/user"    // 用户路径
 	consultPath = "/consult" // 咨询路径
+	teacherPath = "/teacher" // 教师路径
+	majorPath   = "/major"   // 专业路径
 )
 
 // 用户路由
@@ -33,6 +37,11 @@ var userRouter = []server.Router{
 var consultRouter = []server.Router{
 	{
 		RequestType: "POST",
+		Path:        consultPath + "/accept",
+		Handler:     consult.GetAcceptDetail,
+	},
+	{
+		RequestType: "POST",
 		Path:        consultPath + "/ask",
 		Handler:     consult.AskQuestion,
 	},
@@ -40,6 +49,52 @@ var consultRouter = []server.Router{
 		RequestType: "POST",
 		Path:        consultPath + "/predict",
 		Handler:     consult.PredictEnroll,
+	},
+}
+
+var teacherRouter = []server.Router{
+	{
+		RequestType: "POST",
+		Path:        teacherPath + "/list",
+		Handler:     teacher.GetTeacherList,
+	},
+	{
+		RequestType: "POST",
+		Path:        teacherPath + "/add",
+		Handler:     teacher.AddTeacher,
+	},
+	{
+		RequestType: "POST",
+		Path:        teacherPath + "/edit",
+		Handler:     teacher.EditTeacher,
+	},
+	{
+		RequestType: "POST",
+		Path:        teacherPath + "/delete",
+		Handler:     teacher.DeleteTeacher,
+	},
+}
+
+var majorRouter = []server.Router{
+	{
+		RequestType: "POST",
+		Path:        majorPath + "/list",
+		Handler:     major.GetMajorList,
+	},
+	{
+		RequestType: "POST",
+		Path:        majorPath + "/add",
+		Handler:     major.AddMajor,
+	},
+	{
+		RequestType: "POST",
+		Path:        majorPath + "/edit",
+		Handler:     major.EditMajor,
+	},
+	{
+		RequestType: "POST",
+		Path:        majorPath + "/delete",
+		Handler:     major.DeleteMajor,
 	},
 }
 
@@ -63,6 +118,8 @@ func Setup() {
 			mergeRouter(
 				userRouter,
 				consultRouter,
+				teacherRouter,
+				majorRouter,
 			),
 			viper.GetBool("web.recordLog"),
 			viper.GetBool("web.recovery"),
