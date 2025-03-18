@@ -7,6 +7,7 @@ import (
 	"go_server/pkg/util/log"
 )
 
+// 获取历年录取数据
 func GetAcceptDetailsList(major, province string, year int) (details []models.AcceptDetail, err error) {
 	details, err = models.AcceptDetail{}.SelectAcceptDetailsList(major, province, fmt.Sprintf("%d", year))
 	if err != nil {
@@ -15,6 +16,7 @@ func GetAcceptDetailsList(major, province string, year int) (details []models.Ac
 	return
 }
 
+// 问答功能
 func AskQuestion(question string) (string, error) {
 	reply, err := deepseekHandler.SendRequest(question)
 	if err != nil {
@@ -23,6 +25,7 @@ func AskQuestion(question string) (string, error) {
 	return reply, nil
 }
 
+// 录取预测
 func PredictEnroll(major, province, subject string, grade float64, rank int) (string, error) {
 	acceptDetails, err := models.AcceptDetail{
 		Major:    major,
@@ -36,10 +39,11 @@ func PredictEnroll(major, province, subject string, grade float64, rank int) (st
 		err = fmt.Errorf("暂无" + major + "专业在" + province + "的录取信息")
 		return "", err
 	}
-	question, err := MakeQuestion(major, province, subject, grade, rank)
+	question, err := MakeQuestion(acceptDetails, major, province, subject, grade, rank)
 	if err != nil {
 		return "", fmt.Errorf("问题拼接有误")
 	}
+	log.Info("问题:" + question)
 	reply, err := deepseekHandler.SendRequest(question)
 	if err != nil {
 		return "", fmt.Errorf("请求deepseek失败")
@@ -48,7 +52,16 @@ func PredictEnroll(major, province, subject string, grade float64, rank int) (st
 	return reply, nil
 }
 
-func MakeQuestion(major, province, subject string, grade float64, rank int) (string, error) {
-	question := fmt.Sprintf("我是一名%s的%s类高考考生,今年我的分数是:%f,排名是:%d,请快速根据近几年的数据计算我录取赣南师范大学%s专业的概率", province, subject, grade, rank, major)
+// 拼接问题
+func MakeQuestion(acceptDetails []models.AcceptDetail, major, province, subject string, grade float64, rank int) (string, error) {
+	temp := ""
+	for _, detail := range acceptDetails {
+		temp += fmt.Sprintf("%s,%s,%d,%d,%d;\n", detail.Year, detail.Subject, detail.LowestScore, detail.LowestRank, detail.HighestScore)
+	}
+
+	question := fmt.Sprintf(`我是一名%s的%s类高考考生,今年我的分数是:%d,排名是:%d,
+		赣南师范大学近年,%s专业的各科类录取最低分、最低排名以及最高分,分别是:
+		%s请根据近几年的数据详细分析并计算我录取赣南师范大学%s专业的概率`, province, subject, int64(grade), rank, major,
+		temp, major)
 	return question, nil
 }

@@ -6,6 +6,7 @@ import (
 	"go_server/internal/services"
 )
 
+// 查询历年录取详情
 func GetAcceptDetail(resp server.Response) {
 	param := struct {
 		Major    string `json:"major"`
@@ -26,6 +27,7 @@ func GetAcceptDetail(resp server.Response) {
 	resp.Success("operate success")
 }
 
+// AI问答
 func AskQuestion(resp server.Response) {
 	param := struct {
 		Question string `json:"question"`
@@ -43,6 +45,7 @@ func AskQuestion(resp server.Response) {
 	resp.Success("operate success")
 }
 
+// 录取预测
 func PredictEnroll(resp server.Response) {
 	param := struct {
 		Major    string  `json:"major"`

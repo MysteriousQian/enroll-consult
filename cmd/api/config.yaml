@@ -27,7 +27,7 @@ database:
   password: wyq@123456 # 数据库密码
   user: root # 数据库用户名
   dbname: chy_db # 数据库名称
-  log: info # 数据库日志级别  silent >  rrror > Warn  > Info
+  log: info # 数据库日志级别  silent >  error > Warn  > Info
 
 kafka:
   topic: TobSyncFlowData # flow # kafka topic

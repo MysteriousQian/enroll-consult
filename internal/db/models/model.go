@@ -16,5 +16,6 @@ func AutoMigrateAllModels() error {
 		&Year{},
 		&Teacher{},
 		&Major{},
+		&Question{},
 	) // 自动迁移数据库
 }

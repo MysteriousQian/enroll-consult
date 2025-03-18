@@ -40,7 +40,7 @@ func (model AcceptDetail) SelectAcceptDetailsList(major, province, year string) 
 
 func (model AcceptDetail) SelectByMajorProvince() (acceptDetail []AcceptDetail, err error) {
 	err = DB.Model(&model).
-		Where("major = ? AND province = ? ", model.Major, model.Province).
+		Where("major = ? AND province = ?", model.Major, model.Province).
 		Order("year DESC").
 		Find(&acceptDetail).Error
 	return acceptDetail, err

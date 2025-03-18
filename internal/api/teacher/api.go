@@ -5,6 +5,7 @@ import (
 	"go_server/internal/services"
 )
 
+// 教师列表查询
 func GetTeacherList(resp server.Response) {
 	param := struct {
 		Page     int    `json:"page"`
@@ -25,12 +26,15 @@ func GetTeacherList(resp server.Response) {
 	resp.Success("操作成功")
 }
 
+// 添加教师
 func AddTeacher(resp server.Response) {
 	param := struct {
 		Name          string `json:"name"`
 		Avatar        string `json:"avatar"`
 		Subject       string `json:"subject"`
+		Position      string `json:"position"`
 		Qualification string `json:"qualification"`
+		Honor         string `json:"honor"`
 		Description   string `json:"description"`
 	}{}
 	err := resp.Json(&param)
@@ -38,7 +42,7 @@ func AddTeacher(resp server.Response) {
 		resp.Failed("参数错误")
 		return
 	}
-	err = services.AddTeacher(param.Name, param.Avatar, param.Subject, param.Qualification, param.Description)
+	err = services.AddTeacher(param.Name, param.Avatar, param.Subject, param.Position, param.Qualification, param.Honor, param.Description)
 	if err != nil {
 		resp.Failed("添加失败")
 		return
@@ -46,13 +50,16 @@ func AddTeacher(resp server.Response) {
 	resp.Success("操作成功")
 }
 
+// 编辑教师
 func EditTeacher(resp server.Response) {
 	param := struct {
 		Id            int64  `json:"id"`
 		Name          string `json:"name"`
 		Avatar        string `json:"avatar"`
 		Subject       string `json:"subject"`
+		Position      string `json:"position"`
 		Qualification string `json:"qualification"`
+		Honor         string `json:"honor"`
 		Description   string `json:"description"`
 	}{}
 	err := resp.Json(&param)
@@ -60,7 +67,7 @@ func EditTeacher(resp server.Response) {
 		resp.Failed("参数错误")
 		return
 	}
-	err = services.UpdateTeacher(param.Id, param.Name, param.Avatar, param.Subject, param.Qualification, param.Description)
+	err = services.UpdateTeacher(param.Id, param.Name, param.Avatar, param.Subject, param.Position, param.Qualification, param.Honor, param.Description)
 	if err != nil {
 		resp.Failed("编辑失败")
 		return
@@ -68,6 +75,7 @@ func EditTeacher(resp server.Response) {
 	resp.Success("操作成功")
 }
 
+// 删除教师
 func DeleteTeacher(resp server.Response) {
 	param := struct {
 		Id int64 `json:"id"`

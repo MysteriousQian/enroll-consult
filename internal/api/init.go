@@ -3,6 +3,7 @@ package api
 import (
 	"go_server/internal/api/consult"
 	"go_server/internal/api/major"
+	"go_server/internal/api/question"
 	"go_server/internal/api/teacher"
 	"go_server/internal/api/user"
 	"go_server/internal/handler/network/server"
@@ -12,10 +13,11 @@ import (
 )
 
 const (
-	userPath    = "/user"    // 用户路径
-	consultPath = "/consult" // 咨询路径
-	teacherPath = "/teacher" // 教师路径
-	majorPath   = "/major"   // 专业路径
+	userPath     = "/user"     // 用户路径
+	consultPath  = "/consult"  // 咨询路径
+	teacherPath  = "/teacher"  // 教师路径
+	majorPath    = "/major"    // 专业路径
+	questionPath = "/question" // 问题路径
 )
 
 // 用户路由
@@ -52,6 +54,7 @@ var consultRouter = []server.Router{
 	},
 }
 
+// 教师路由
 var teacherRouter = []server.Router{
 	{
 		RequestType: "POST",
@@ -75,6 +78,7 @@ var teacherRouter = []server.Router{
 	},
 }
 
+// 专业路由
 var majorRouter = []server.Router{
 	{
 		RequestType: "POST",
@@ -95,6 +99,25 @@ var majorRouter = []server.Router{
 		RequestType: "POST",
 		Path:        majorPath + "/delete",
 		Handler:     major.DeleteMajor,
+	},
+}
+
+// 问题路由
+var questionRouter = []server.Router{
+	{
+		RequestType: "POST",
+		Path:        questionPath + "/list",
+		Handler:     question.GetQuestionList,
+	},
+	{
+		RequestType: "POST",
+		Path:        questionPath + "/add",
+		Handler:     question.AddQuestion,
+	},
+	{
+		RequestType: "POST",
+		Path:        questionPath + "/delete",
+		Handler:     question.DeleteQuestion,
 	},
 }
 
@@ -120,6 +143,7 @@ func Setup() {
 				consultRouter,
 				teacherRouter,
 				majorRouter,
+				questionRouter,
 			),
 			viper.GetBool("web.recordLog"),
 			viper.GetBool("web.recovery"),

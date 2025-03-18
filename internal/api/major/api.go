@@ -5,6 +5,7 @@ import (
 	"go_server/internal/services"
 )
 
+// 获取专业列表
 func GetMajorList(resp server.Response) {
 	param := struct {
 		Page     int    `json:"page"`
@@ -25,6 +26,7 @@ func GetMajorList(resp server.Response) {
 	resp.Success("操作成功")
 }
 
+// 添加专业
 func AddMajor(resp server.Response) {
 	param := struct {
 		Name        string  `json:"name"`
