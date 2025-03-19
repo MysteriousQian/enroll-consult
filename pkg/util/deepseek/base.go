@@ -34,7 +34,8 @@ func Init() {
 */
 func SendRequest(question string) (string, error) {
 	request := deepseek.ChatCompletionRequest{
-		Model: deepseek.DeepSeekChat,
+		// Model: deepseek.DeepSeekChat, // DeepSeek-V3
+		Model: deepseek.DeepSeekChatR1, // DeepSeek-R1
 		Messages: []deepseek.ChatCompletionMessage{
 			{
 				Role:    deepseek.ChatMessageRoleSystem,

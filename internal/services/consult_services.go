@@ -61,7 +61,7 @@ func MakeQuestion(acceptDetails []models.AcceptDetail, major, province, subject 
 
 	question := fmt.Sprintf(`我是一名%s的%s类高考考生,今年我的分数是:%d,排名是:%d,
 		赣南师范大学近年,%s专业的各科类录取最低分、最低排名以及最高分,分别是:
-		%s请根据近几年的数据详细分析并计算我录取赣南师范大学%s专业的概率`, province, subject, int64(grade), rank, major,
+		%s请根据近几年的数据详细分析并计算我录取赣南师范大学%s专业的概率,若概率较低推荐一下同校其他专业`, province, subject, int64(grade), rank, major,
 		temp, major)
 	return question, nil
 }

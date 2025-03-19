@@ -1,6 +1,6 @@
 package models
 
-// 用户管理
+// 教师管理
 type Teacher struct {
 	Id            int64  `json:"id" gorm:"primary_key;AUTO_INCREMENT;comment:账号ID"`
 	Name          string `json:"name" gorm:"type:varchar(150);default '';comment:账号名称;"`
