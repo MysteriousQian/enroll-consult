@@ -31,13 +31,14 @@ func GetAcceptDetail(resp server.Response) {
 func AskQuestion(resp server.Response) {
 	param := struct {
 		Question string `json:"question"`
+		Model    string `json:"model"`
 	}{}
 	err := resp.Json(&param)
 	if err != nil || param.Question == "" {
 		resp.Failed("param error")
 		return
 	}
-	reply, err := services.AskQuestion(param.Question)
+	reply, err := services.AskQuestion(param.Question, param.Model)
 	if err != nil {
 		resp.Failed(fmt.Sprintf("%v", err))
 	}

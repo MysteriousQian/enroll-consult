@@ -5,6 +5,8 @@ import (
 	"go_server/internal/db/models"
 	deepseekHandler "go_server/pkg/util/deepseek"
 	"go_server/pkg/util/log"
+
+	"github.com/p9966/go-deepseek"
 )
 
 // 获取历年录取数据
@@ -17,8 +19,14 @@ func GetAcceptDetailsList(major, province string, year int) (details []models.Ac
 }
 
 // 问答功能
-func AskQuestion(question string) (string, error) {
-	reply, err := deepseekHandler.SendRequest(question)
+func AskQuestion(question, model string) (string, error) {
+	if model == "" {
+		model = deepseek.DeepSeekChat
+	}
+	if model != deepseek.DeepSeekChatR1 && model != deepseek.DeepSeekChat {
+		return "", fmt.Errorf("模型类型错误")
+	}
+	reply, err := deepseekHandler.SendRequest(question, model)
 	if err != nil {
 		return "", err
 	}
@@ -44,7 +52,7 @@ func PredictEnroll(major, province, subject string, grade float64, rank int) (st
 		return "", fmt.Errorf("问题拼接有误")
 	}
 	log.Info("问题:" + question)
-	reply, err := deepseekHandler.SendRequest(question)
+	reply, err := deepseekHandler.SendRequest(question, deepseek.DeepSeekChatR1)
 	if err != nil {
 		return "", fmt.Errorf("请求deepseek失败")
 	}
