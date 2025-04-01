@@ -4,21 +4,24 @@ import (
 	"fmt"
 	"go_server/internal/handler/network/server"
 	"go_server/internal/services"
+	"strconv"
 )
 
 // 问题列表查询
 func GetQuestionList(resp server.Response) {
-	param := struct {
-		Page     int    `json:"page"`
-		PageSize int    `json:"page_size"`
-		Content  string `json:"content"`
-	}{}
-	err := resp.Json(&param)
+	query := resp.Context.Request.URL.Query()
+	page, err := strconv.Atoi(query.Get("page"))
 	if err != nil {
 		resp.Failed("参数错误")
 		return
 	}
-	questionList, total, err := services.GetQuestionList(param.Page, param.PageSize, param.Content)
+	pageSize, err := strconv.Atoi(query.Get("page_size"))
+	if err != nil {
+		resp.Failed("参数错误")
+		return
+	}
+	content := query.Get("content")
+	questionList, total, err := services.GetQuestionList(page, pageSize, content)
 	if err != nil {
 		resp.Failed(fmt.Sprintf("%v", err))
 		return

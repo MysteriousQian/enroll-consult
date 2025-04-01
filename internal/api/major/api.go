@@ -3,21 +3,22 @@ package major
 import (
 	"go_server/internal/handler/network/server"
 	"go_server/internal/services"
+	"strconv"
 )
 
 // 获取专业列表
 func GetMajorList(resp server.Response) {
-	param := struct {
-		Page     int    `json:"page"`
-		PageSize int    `json:"page_size"`
-		Name     string `json:"name"`
-	}{}
-	err := resp.Json(&param)
+	query := resp.Context.Request.URL.Query()
+	page, err := strconv.Atoi(query.Get("page"))
 	if err != nil {
-		resp.Failed("参数错误")
-		return
+		page = 1
 	}
-	majorList, err := services.GetMajorList(param.Page, param.PageSize, param.Name)
+	pageSize, err := strconv.Atoi(query.Get("page_size"))
+	if err != nil {
+		pageSize = 10
+	}
+	name := query.Get("name")
+	majorList, err := services.GetMajorList(page, pageSize, name)
 	if err != nil {
 		resp.Failed("获取失败")
 		return

@@ -39,11 +39,6 @@ var userRouter = []server.Router{
 var consultRouter = []server.Router{
 	{
 		RequestType: "POST",
-		Path:        consultPath + "/accept",
-		Handler:     consult.GetAcceptDetail,
-	},
-	{
-		RequestType: "POST",
 		Path:        consultPath + "/ask",
 		Handler:     consult.AskQuestion,
 	},
@@ -57,7 +52,7 @@ var consultRouter = []server.Router{
 // 教师路由
 var teacherRouter = []server.Router{
 	{
-		RequestType: "POST",
+		RequestType: "GET",
 		Path:        teacherPath + "/list",
 		Handler:     teacher.GetTeacherList,
 	},
@@ -67,12 +62,12 @@ var teacherRouter = []server.Router{
 		Handler:     teacher.AddTeacher,
 	},
 	{
-		RequestType: "POST",
+		RequestType: "PUT",
 		Path:        teacherPath + "/edit",
 		Handler:     teacher.EditTeacher,
 	},
 	{
-		RequestType: "POST",
+		RequestType: "DELETE",
 		Path:        teacherPath + "/delete",
 		Handler:     teacher.DeleteTeacher,
 	},
@@ -81,7 +76,7 @@ var teacherRouter = []server.Router{
 // 专业路由
 var majorRouter = []server.Router{
 	{
-		RequestType: "POST",
+		RequestType: "GET",
 		Path:        majorPath + "/list",
 		Handler:     major.GetMajorList,
 	},
@@ -91,21 +86,26 @@ var majorRouter = []server.Router{
 		Handler:     major.AddMajor,
 	},
 	{
-		RequestType: "POST",
+		RequestType: "PUT",
 		Path:        majorPath + "/edit",
 		Handler:     major.EditMajor,
 	},
 	{
-		RequestType: "POST",
+		RequestType: "DELETE",
 		Path:        majorPath + "/delete",
 		Handler:     major.DeleteMajor,
+	},
+	{
+		RequestType: "GET",
+		Path:        majorPath + "/accept",
+		Handler:     consult.GetAcceptDetail,
 	},
 }
 
 // 问题路由
 var questionRouter = []server.Router{
 	{
-		RequestType: "POST",
+		RequestType: "GET",
 		Path:        questionPath + "/list",
 		Handler:     question.GetQuestionList,
 	},
@@ -115,7 +115,7 @@ var questionRouter = []server.Router{
 		Handler:     question.AddQuestion,
 	},
 	{
-		RequestType: "POST",
+		RequestType: "DELETE",
 		Path:        questionPath + "/delete",
 		Handler:     question.DeleteQuestion,
 	},

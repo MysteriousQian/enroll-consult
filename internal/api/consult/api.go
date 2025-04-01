@@ -4,21 +4,19 @@ import (
 	"fmt"
 	"go_server/internal/handler/network/server"
 	"go_server/internal/services"
+	"strconv"
 )
 
 // 查询历年录取详情
 func GetAcceptDetail(resp server.Response) {
-	param := struct {
-		Major    string `json:"major"`
-		Province string `json:"province"`
-		Year     int    `json:"year"`
-	}{}
-	err := resp.Json(&param)
+	query := resp.Context.Request.URL.Query()
+	major := query.Get("major")
+	province := query.Get("province")
+	year, err := strconv.Atoi(query.Get("year"))
 	if err != nil {
 		resp.Failed("param error")
-		return
 	}
-	details, err := services.GetAcceptDetailsList(param.Major, param.Province, param.Year)
+	details, err := services.GetAcceptDetailsList(major, province, year)
 	if err != nil {
 		resp.Failed(fmt.Sprintf("%v", err))
 		return
